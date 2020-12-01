@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 2b7fecfc9c9646e4f8255f0ad4681d03, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -208,7 +208,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 688235206}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 100, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -389,6 +389,36 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1605281286
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1605281287}
+  m_Layer: 0
+  m_Name: Player
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1605281287
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1605281286}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -191.55673, y: 74.57794, z: 286.7608}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1646902905
 GameObject:
   m_ObjectHideFlags: 0
@@ -401,6 +431,7 @@ GameObject:
   - component: {fileID: 1646902907}
   - component: {fileID: 1646902906}
   - component: {fileID: 1646902909}
+  - component: {fileID: 1646902910}
   m_Layer: 0
   m_Name: Terrain
   m_TagString: Untagged
@@ -478,21 +509,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4531ff2a79e8c8c4e9a70e7d5b874e01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  toolModeInt: 1
-  erosionTypeInt: 3
+  toolModeInt: 0
+  erosionTypeInt: 0
   generatorTypeInt: 3
   isBrushOn: 0
   isBrushHidden: 0
   isBrushPainting: 0
-  brushPosition: {x: 0, y: 0, z: 0}
-  brushSize: 50
+  brushPosition: {x: 91.4306, y: 137.11852, z: 729.8694}
+  brushSize: 61
   brushOpacity: 1
   brushSoftness: 0.5
   neighbourhoodInt: 0
   useDifferenceMaps: 1
   thermalIterations: 25
-  thermalMinSlope: 1
-  thermalFalloff: 0.5
+  thermalMinSlope: 2.5
+  thermalFalloff: 0.1
   hydraulicTypeInt: 1
   hydraulicIterations: 12
   hydraulicMaxSlope: 60
@@ -526,27 +557,39 @@ MonoBehaviour:
   - {fileID: 8574412962073106934, guid: 54206f9c2ab7e4ea4ba8e9cf613a3e98, type: 2}
   - {fileID: 8574412962073106934, guid: 41526ae9adddd452abecd6e1b5b53128, type: 2}
   - {fileID: 8574412962073106934, guid: 0aab4b8e550a94d77a6279ab5c5fb320, type: 2}
+  - {fileID: 8574412962073106934, guid: eee4b4b34fd93437b8dc1ba16d6c75f6, type: 2}
   slopeBlendMinAngle: 10
   slopeBlendMaxAngle: 30
   heightBlendPoints:
   - 0.1
   - 0.14440434
-  - 0.42675093
+  - 0.5
   - 0.7090975
+  - 0.8050953
+  - 0.9010932
   gradientStyles: []
-  voronoiTypeInt: 1
-  voronoiCells: 8
-  voronoiFeatures: 1
+  voronoiTypeInt: 0
+  voronoiCells: 2
+  voronoiFeatures: 0.059
   voronoiScale: 0
-  voronoiBlend: 1
+  voronoiBlend: 0.296
   diamondSquareDelta: 0.2
   diamondSquareBlend: 0.5
   perlinFrequency: 2
   perlinAmplitude: 0.5
   perlinOctaves: 9
   perlinBlend: 0.25
-  smoothBlend: 0.148
+  smoothBlend: 1
   smoothIterations: 1
   normaliseMin: 0
   normaliseMax: 1
   normaliseBlend: 1
+--- !u!45 &1646902910
+Skybox:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1646902905}
+  m_Enabled: 1
+  m_CustomSkybox: {fileID: 0}
