@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    private Vector3 moveDirection;
+    private Vector3 addForceDownPower = Vector3.zero;
+    private CharacterController controller;
+
     private float speed;        // 移動速度    
     private float rotateSpeed;  // 回転速度
     private float gravity;      // 重力
@@ -21,7 +25,7 @@ public class PlayerController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         this.addForceDownPower = Vector3.zero;
         if (controller.isGrounded)
@@ -37,6 +41,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
+            transform.Rotate(0, Input.GetAxis("Horizontal") * rotateSpeed * Time.deltaTime, 0);
             this.moveDirection.y -= this.gravity * Time.deltaTime;
         }
         controller.Move(this.moveDirection * Time.deltaTime + this.addForceDownPower);
