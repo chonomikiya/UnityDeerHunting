@@ -784,6 +784,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de943a58458e544caa8e7a9b3e706bc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  run_Limit: 3.5
 --- !u!143 &1605281289
 CharacterController:
   m_ObjectHideFlags: 0
