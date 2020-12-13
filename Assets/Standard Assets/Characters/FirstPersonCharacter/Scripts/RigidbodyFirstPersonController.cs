@@ -96,7 +96,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
         [SerializeField] private GameObject Gun = null;
         private bool m_WeaponSwitch = false;
         [SerializeField] private float minGun_posY = 0.1F,maxGun_posY = 0.5F;
-
+        [SerializeField] private Vector3 gunposition = Vector3.zero;
+        
         public Vector3 Velocity
         {
             get { return m_RigidBody.velocity; }
