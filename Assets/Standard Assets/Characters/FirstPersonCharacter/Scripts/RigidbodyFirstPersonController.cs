@@ -4,6 +4,8 @@ using UnityStandardAssets.CrossPlatformInput;
 
 namespace UnityStandardAssets.Characters.FirstPerson
 {
+    
+
     [RequireComponent(typeof (Rigidbody))]
     [RequireComponent(typeof (CapsuleCollider))]
     public class RigidbodyFirstPersonController : MonoBehaviour
@@ -76,7 +78,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
             [Tooltip("set it to 0.1 or more if you get stuck in wall")]
             public float shellOffset; //reduce the radius by that ratio to avoid getting stuck in wall (a value of 0.1f is nice)
         }
-        enum State{
+        public enum State{
             holdRifle,Switching,closeRifle
         }
         private State state = State.closeRifle;
@@ -97,7 +99,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private bool m_WeaponSwitch = false;
         [SerializeField] private float minGun_posY = 0.1F,maxGun_posY = 0.5F;
         [SerializeField] private Vector3 gunposition = Vector3.zero;
-        
+        [SerializeField] private Animator m_animator = null;
+
         public Vector3 Velocity
         {
             get { return m_RigidBody.velocity; }
@@ -134,11 +137,14 @@ namespace UnityStandardAssets.Characters.FirstPerson
         {
             m_RigidBody = GetComponent<Rigidbody>();
             m_Capsule = GetComponent<CapsuleCollider>();
+            m_animator = GetComponent<Animator>();
             mouseLook.Init (transform, cam.transform);
         }
         private void Update()
         {
             RotateView();
+            AnimationTest();
+
 
             // if (CrossPlatformInputManager.GetButtonDown("Jump") && !m_Jump)
             // {
@@ -333,5 +339,20 @@ namespace UnityStandardAssets.Characters.FirstPerson
             if(argz != 0)  postmp.z = argz;
             targetObj.transform.localPosition = postmp;
         }
+        void AnimationTest(){
+            if(Input.GetKeyDown(KeyCode.Alpha2)){
+                m_animator.Play("HoldRifle");
+            }
+            if(Input.GetKeyDown(KeyCode.Alpha3)){
+                m_animator.Play("LowerTheRifle");
+            }
+            if(Input.GetKeyDown(KeyCode.Alpha4)){
+                m_animator.Play("BoltAction");
+            }
+        }
+        public void Logger(){
+            Debug.Log("End Animation");
+        }
+
     }
 }
