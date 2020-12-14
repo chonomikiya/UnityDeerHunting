@@ -144,7 +144,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
         {
             RotateView();
             AnimationTest();
-
+            StateChange();
 
             // if (CrossPlatformInputManager.GetButtonDown("Jump") && !m_Jump)
             // {
@@ -156,7 +156,6 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private void FixedUpdate()
         {
             GroundCheck();
-            StateChange();
             Vector2 input = GetInput();
             switch(state){
                 case State.closeRifle:
@@ -170,7 +169,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
                     }
                     break;
                 case State.Switching:
-                    SwitchingWeapon();
+                    // SwitchingWeapon();
                     break;
                 default:
                     break;
@@ -293,40 +292,47 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 m_Jumping = false;
             }
         }
-        private void SwitchingWeapon(){
-            float veloY = Gun.transform.localPosition.y;
-            if(Input.GetKeyDown(KeyCode.Return)){
-                Debug.Log(veloY);
-            }
-            if(m_WeaponSwitch){
-                //おそらく値の切り捨てによりStateの移行が上手くいかなかったため最小値から0.01マイナスしている。                
-                veloY += ((minGun_posY-0.01F)-veloY)/2F*(Time.deltaTime*10);
-            }else if(!m_WeaponSwitch){
-                veloY += (maxGun_posY+0.01F-veloY)/2F*(Time.deltaTime*10);
-            }
-            floatToLocalPosition(0,veloY,0,Gun);
+        // private void SwitchingWeapon(){
+        //     float veloY = Gun.transform.localPosition.y;
+        //     if(Input.GetKeyDown(KeyCode.Return)){
+        //         Debug.Log(veloY);
+        //     }
+        //     if(m_WeaponSwitch){
+        //         //おそらく値の切り捨てによりStateの移行が上手くいかなかったため最小値から0.01マイナスしている。                
+        //         veloY += ((minGun_posY-0.01F)-veloY)/2F*(Time.deltaTime*10);
+        //     }else if(!m_WeaponSwitch){
+        //         veloY += (maxGun_posY+0.01F-veloY)/2F*(Time.deltaTime*10);
+        //     }
+        //     floatToLocalPosition(0,veloY,0,Gun);
             
-        }
+        // }
         private void StateChange(){
-            if(Input.GetKeyDown(KeyCode.Alpha1) 
-            && (state == State.closeRifle || state == State.holdRifle)){
-                state = State.Switching;
+            if(Input.GetKeyDown(KeyCode.Alpha1) &&
+                (state == State.closeRifle)){
+                state = State.holdRifle;
+                m_animator.Play("HoldRifle");
 
             }
-            if(state == State.Switching){
-                if(Gun.transform.localPosition.y <= minGun_posY && m_WeaponSwitch ){
-                    Debug.Log("Switched");
-                    state = State.closeRifle;
-                    floatToLocalPosition(0,minGun_posY,0,Gun);
-                    m_WeaponSwitch = false;
-                }
-                if(Gun.transform.localPosition.y >= maxGun_posY && !m_WeaponSwitch){
-                    Debug.Log("Switched");
-                    state = State.holdRifle;
-                    floatToLocalPosition(0,maxGun_posY,0,Gun);
-                    m_WeaponSwitch = true;
-                }
+            if(Input.GetKeyDown(KeyCode.Alpha1) &&
+                (state == State.holdRifle)){
+                state = State.closeRifle;
+                m_animator.Play("LowerTheRifle");
             }
+            // if(state == State.Switching){
+            //     if(Gun.transform.localPosition.y <= minGun_posY && m_WeaponSwitch ){
+            //         Debug.Log("Switched");
+            //         state = State.closeRifle;
+            //         m_animator.Play("HoldRifle");
+            //         floatToLocalPosition(0,minGun_posY,0,Gun);
+            //         m_WeaponSwitch = false;
+            //     }
+            //     if(Gun.transform.localPosition.y >= maxGun_posY && !m_WeaponSwitch){
+            //         Debug.Log("Switched");
+            //         state = State.holdRifle;
+            //         floatToLocalPosition(0,maxGun_posY,0,Gun);
+            //         m_WeaponSwitch = true;
+            //     }
+            // }
 
         }
         //設定した値を超えたときに値を正しくする関数
@@ -340,9 +346,9 @@ namespace UnityStandardAssets.Characters.FirstPerson
             targetObj.transform.localPosition = postmp;
         }
         void AnimationTest(){
-            if(Input.GetKeyDown(KeyCode.Alpha2)){
-                m_animator.Play("HoldRifle");
-            }
+            // if(Input.GetKeyDown(KeyCode.Alpha2)){
+            //     m_animator.Play("HoldRifle");
+            // }
             if(Input.GetKeyDown(KeyCode.Alpha3)){
                 m_animator.Play("LowerTheRifle");
             }
