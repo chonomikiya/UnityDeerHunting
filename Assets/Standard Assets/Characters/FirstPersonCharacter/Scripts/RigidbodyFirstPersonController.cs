@@ -79,16 +79,15 @@ namespace UnityStandardAssets.Characters.FirstPerson
             public float shellOffset; //reduce the radius by that ratio to avoid getting stuck in wall (a value of 0.1f is nice)
         }
         public enum State{
-            holdRifle,Switching,closeRifle
+            holdRifle,Switching,closeRifle,noBullet
         }
-        private State state = State.closeRifle;
+        private State state = State.holdRifle;
         
         public KeyCode weponSwitchKey = KeyCode.Alpha1;
         public Camera cam;
         public MovementSettings movementSettings = new MovementSettings();
         public MouseLook mouseLook = new MouseLook();
         public AdvancedSettings advancedSettings = new AdvancedSettings();
-
 
         private Rigidbody m_RigidBody;
         private CapsuleCollider m_Capsule;
@@ -100,6 +99,9 @@ namespace UnityStandardAssets.Characters.FirstPerson
         [SerializeField] private float minGun_posY = 0.1F,maxGun_posY = 0.5F;
         [SerializeField] private Vector3 gunposition = Vector3.zero;
         [SerializeField] private Animator m_animator = null;
+        [SerializeField] private GameObject bulletPrefab = null;
+        [SerializeField] private GameObject Bullet_transform = null;
+
 
         public Vector3 Velocity
         {
@@ -115,11 +117,6 @@ namespace UnityStandardAssets.Characters.FirstPerson
         {
             get { return m_Jumping; }
         }
-        // public bool WeponSwitch
-        // {
-        //     get {return m_WeaponSwitch;}
-        // }
-
         public bool Running
         {
             get
@@ -142,30 +139,31 @@ namespace UnityStandardAssets.Characters.FirstPerson
         }
         private void Update()
         {
+            if(Input.GetKeyDown(KeyCode.Return)){
+                Debug.Log(Bullet_transform.name);
+            }
             RotateView();
             AnimationTest();
-            StateChange();
-
-            // if (CrossPlatformInputManager.GetButtonDown("Jump") && !m_Jump)
-            // {
-            //     m_Jump = true;
-            // }
-        }
-
-
-        private void FixedUpdate()
-        {
-            GroundCheck();
-            Vector2 input = GetInput();
+            
             switch(state){
                 case State.closeRifle:
                     if(Input.GetKeyDown(KeyCode.Return)){
                         Debug.Log("closeRifleState");
                     }
+                    StateChange();
                     break;
                 case State.holdRifle:
                     if(Input.GetKeyDown(KeyCode.Return)){
                         Debug.Log("haveRifleState");
+                    }
+                    StateChange();
+                    if(Input.GetKeyDown(KeyCode.Mouse0)){
+                        BulletFire();
+                    }
+                    break;
+                case State.noBullet: 
+                    if(Input.GetKeyDown(KeyCode.R)){
+                        Reload();
                     }
                     break;
                 case State.Switching:
@@ -174,6 +172,34 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 default:
                     break;
             }
+            // if (CrossPlatformInputManager.GetButtonDown("Jump") && !m_Jump)
+            // {
+            //     m_Jump = true;
+            // }
+        }
+        void BulletInstance(){
+            GameObject Bullet = 
+            Instantiate(bulletPrefab,Bullet_transform.transform.position,Bullet_transform.transform.rotation) as GameObject;
+        
+        }
+        void BulletFire(){
+            BulletInstance();
+            state = State.noBullet;
+            Debug.Log("Fire");
+        }
+        void Reload(){
+            if(state == State.noBullet){
+                m_animator.Play("BoltAction");
+                
+            }else{
+                Debug.Log("err");
+            }
+        }
+        private void FixedUpdate()
+        {
+            GroundCheck();
+            Vector2 input = GetInput();
+            
             if ((Mathf.Abs(input.x) > float.Epsilon || Mathf.Abs(input.y) > float.Epsilon) && (advancedSettings.airControl || m_IsGrounded))
             {
                 // always move along the camera forward as it is the direction that it being aimed at
@@ -217,8 +243,6 @@ namespace UnityStandardAssets.Characters.FirstPerson
             }
             m_Jump = false;
         }
-
-
         private float SlopeMultiplier()
         {
             float angle = Vector3.Angle(m_GroundContactNormal, Vector3.up);
@@ -251,7 +275,6 @@ namespace UnityStandardAssets.Characters.FirstPerson
 			movementSettings.UpdateDesiredTargetSpeed(input);
             return input;
         }
-
 
         private void RotateView()
         {
@@ -309,31 +332,15 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private void StateChange(){
             if(Input.GetKeyDown(KeyCode.Alpha1) &&
                 (state == State.closeRifle)){
-                state = State.holdRifle;
+                state = State.Switching;
                 m_animator.Play("HoldRifle");
 
             }
             if(Input.GetKeyDown(KeyCode.Alpha1) &&
                 (state == State.holdRifle)){
-                state = State.closeRifle;
+                state = State.Switching;
                 m_animator.Play("LowerTheRifle");
             }
-            // if(state == State.Switching){
-            //     if(Gun.transform.localPosition.y <= minGun_posY && m_WeaponSwitch ){
-            //         Debug.Log("Switched");
-            //         state = State.closeRifle;
-            //         m_animator.Play("HoldRifle");
-            //         floatToLocalPosition(0,minGun_posY,0,Gun);
-            //         m_WeaponSwitch = false;
-            //     }
-            //     if(Gun.transform.localPosition.y >= maxGun_posY && !m_WeaponSwitch){
-            //         Debug.Log("Switched");
-            //         state = State.holdRifle;
-            //         floatToLocalPosition(0,maxGun_posY,0,Gun);
-            //         m_WeaponSwitch = true;
-            //     }
-            // }
-
         }
         //設定した値を超えたときに値を正しくする関数
         //引数が0の時は何もしない
@@ -346,19 +353,20 @@ namespace UnityStandardAssets.Characters.FirstPerson
             targetObj.transform.localPosition = postmp;
         }
         void AnimationTest(){
-            // if(Input.GetKeyDown(KeyCode.Alpha2)){
-            //     m_animator.Play("HoldRifle");
+            // if(Input.GetKeyDown(KeyCode.Alpha3)){
+            //     m_animator.Play("LowerTheRifle");
             // }
-            if(Input.GetKeyDown(KeyCode.Alpha3)){
-                m_animator.Play("LowerTheRifle");
-            }
-            if(Input.GetKeyDown(KeyCode.Alpha4)){
-                m_animator.Play("BoltAction");
-            }
+            // if(Input.GetKeyDown(KeyCode.Alpha4)){
+            //     m_animator.Play("BoltAction");
+            // }
         }
-        public void Logger(){
-            Debug.Log("End Animation");
+        public void ChangeState_Hold(){
+            state = State.holdRifle;
+            Debug.Log("HoldRifleState");
         }
-
+        public void ChangeState_Close(){
+            state = State.closeRifle;
+            Debug.Log("closeRifleState");
+        }
     }
 }
