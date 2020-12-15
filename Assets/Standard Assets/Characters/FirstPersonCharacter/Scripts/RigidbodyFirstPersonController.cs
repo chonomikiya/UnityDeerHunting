@@ -158,7 +158,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
                     }
                     StateChange();
                     if(Input.GetKeyDown(KeyCode.Mouse0)){
-                        BulletFire();
+                        TriggerHappy();
+                        // BulletFire();
                     }
                     break;
                 case State.noBullet: 
@@ -182,11 +183,18 @@ namespace UnityStandardAssets.Characters.FirstPerson
             Instantiate(bulletPrefab,Bullet_transform.transform.position,Bullet_transform.transform.rotation) as GameObject;
         
         }
+
+        //弾のステートはboolで管理したほうがいい気もする
         void BulletFire(){
             BulletInstance();
             state = State.noBullet;
             Debug.Log("Fire");
         }
+        //テスト用打ち放題
+        void TriggerHappy(){
+            BulletInstance();
+        }
+
         void Reload(){
             if(state == State.noBullet){
                 m_animator.Play("BoltAction");
@@ -315,20 +323,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 m_Jumping = false;
             }
         }
-        // private void SwitchingWeapon(){
-        //     float veloY = Gun.transform.localPosition.y;
-        //     if(Input.GetKeyDown(KeyCode.Return)){
-        //         Debug.Log(veloY);
-        //     }
-        //     if(m_WeaponSwitch){
-        //         //おそらく値の切り捨てによりStateの移行が上手くいかなかったため最小値から0.01マイナスしている。                
-        //         veloY += ((minGun_posY-0.01F)-veloY)/2F*(Time.deltaTime*10);
-        //     }else if(!m_WeaponSwitch){
-        //         veloY += (maxGun_posY+0.01F-veloY)/2F*(Time.deltaTime*10);
-        //     }
-        //     floatToLocalPosition(0,veloY,0,Gun);
-            
-        // }
+
         private void StateChange(){
             if(Input.GetKeyDown(KeyCode.Alpha1) &&
                 (state == State.closeRifle)){
