@@ -40,7 +40,6 @@ public class DeerController : MonoBehaviour
         DeerNav = GetComponent<NavMeshAgent>();
         //はじめに複数行き先を用意して順番に回る
         //二番目に近いTargetへ行く
-        Destination = GameObject.Find("target");
         m_DeerAnimator = GetComponent<Animator>();
     }
     void Update() {
@@ -112,6 +111,7 @@ public class DeerController : MonoBehaviour
         }
         if(navSwitch)   NavValue--;
         if(!navSwitch)  NavValue++;
-        DeerNav.SetDestination(NavPos);m_DeerAnimator.Play("walk");
+        DeerNav.SetDestination(NavPos);
+        m_DeerAnimator.Play("walk");
     }
 }
