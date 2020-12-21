@@ -18,7 +18,6 @@ public class BulletController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(m_rigidbody.velocity.magnitude);
 
     }
 }

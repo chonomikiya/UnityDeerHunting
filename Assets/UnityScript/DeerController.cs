@@ -25,6 +25,8 @@ public class DeerController : MonoBehaviour
     [SerializeField] GameObject Destination02;
     [SerializeField] GameObject Destination03;
     [SerializeField] GameObject Destination04;
+    [SerializeField] GameObject DeerDroppingPrefab;
+    [SerializeField] GameObject DroppingPosition;
     int NavValue=0;
     Animator m_DeerAnimator;
     [SerializeField] int max_Random_value = 6;
@@ -49,21 +51,20 @@ public class DeerController : MonoBehaviour
             default :
                 break;
         }
-
-
         if(Input.GetKeyDown(KeyCode.Return)){
             // Animatinon_Idle_Play();
             // Eat_or_nothing();
             SetDestination();
         }
         if(Input.GetKeyDown(KeyCode.Space)){
-            Debug.Log(NavValue);
+            Dropping();
         }
-        
     }
     void FixedUpdate(){
-        if(Vector3.Distance(this.transform.position,NavPos) < 1){
-            SetDestination();
+        if(Vector3.Distance(this.transform.position,NavPos) < 5){
+            // SetDestination();
+            Animation_Eat_Play();
+            DeerNav.ResetPath();
         }
     }
     //Idleアニメーション時に呼び出す関数
@@ -78,6 +79,9 @@ public class DeerController : MonoBehaviour
             Debug.Log(log);
         }
     }
+    public void Dropping(){
+        GameObject Drop = Instantiate(DeerDroppingPrefab,DroppingPosition.transform.position,DroppingPosition.transform.rotation) as GameObject;
+    }
     
     public void Animation_Eat_Play(){
         m_DeerAnimator.Play("Eat");
@@ -90,7 +94,7 @@ public class DeerController : MonoBehaviour
         DeerNav.SetDestination(Destination.transform.position);
     }
 
-    void SetDestination(){
+    public void SetDestination(){
         switch(NavValue){
             case 0:
                 NavPos = Destination.transform.position;
