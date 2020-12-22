@@ -9,17 +9,14 @@ public class DeerController : MonoBehaviour
     enum State {
         walk,
         lookAround,
+        vigilant,
         idle,
         run
     }
-    // enum NavTarget{
-
-    // }
-
-
     Rigidbody m_rigidbody = null;
     State state = State.idle;
     NavMeshAgent DeerNav;
+    [SerializeField] GameObject Player;
     [SerializeField] GameObject Destination;
 
     [SerializeField] GameObject Destination02;
@@ -28,10 +25,13 @@ public class DeerController : MonoBehaviour
     [SerializeField] GameObject DeerDroppingPrefab;
     [SerializeField] GameObject DroppingPosition;
     int NavValue=0;
+    [SerializeField] int m_Health = 5;
     Animator m_DeerAnimator;
     [SerializeField] int max_Random_value = 6;
     Vector3 NavPos;
     bool navSwitch = false;
+    bool vigilant = false;
+
 
 
     // Start is called before the first frame update
@@ -47,6 +47,8 @@ public class DeerController : MonoBehaviour
     void Update() {
         switch(state){
             case State.idle:
+                break;
+            case State.vigilant:
                 break;
             default :
                 break;
@@ -92,6 +94,23 @@ public class DeerController : MonoBehaviour
     public void Animation_walk_Play(){
         m_DeerAnimator.Play("walk");
         DeerNav.SetDestination(Destination.transform.position);
+    }
+    public void Animatiopn_Damage_Left_Play(){
+        m_DeerAnimator.Play("Damage_Left");
+    }
+    public void Animatiopn_Damage_Right_Play(){
+        m_DeerAnimator.Play("Damage_Right");
+    }
+    public void Animation_Die_Play(){
+        m_DeerAnimator.Play("Die_Left");
+    }
+    public void Damage_to_Life(){
+        m_Health--;
+        if(m_Health <= 0){
+            Animation_Die_Play();
+            DeerNav.ResetPath();
+            m_rigidbody.velocity = Vector3.zero;
+        }
     }
 
     public void SetDestination(){

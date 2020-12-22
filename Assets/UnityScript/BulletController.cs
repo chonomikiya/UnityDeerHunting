@@ -8,6 +8,33 @@ public class BulletController : MonoBehaviour
     Rigidbody m_rigidbody = null;
     [SerializeField] float initial_velocity = 0;
     Vector3 speed;
+    
+    private void OnCollisionEnter(Collision other) {
+        if(other.collider.tag == "body_L"){
+            Debug.Log(other.collider.tag);
+            // this.gameObject.GetComponent<Rigidbody>().isKinematic=true;
+            other.gameObject.GetComponent<DeerController>().Animatiopn_Damage_Left_Play();
+            Destroy(this.gameObject);
+            return ;
+        }
+        if(other.collider.tag == "body_R"){
+            Debug.Log(other.collider.tag);
+            // this.gameObject.GetComponent<Rigidbody>().isKinematic=true;
+            other.gameObject.GetComponent<DeerController>().Animatiopn_Damage_Right_Play();
+
+            Destroy(this.gameObject);
+            return;
+        }
+        // Debug.Log(other.collider.tag);
+        // Debug.Log(other.gameObject.name);
+        // Destroy(this.gameObject);
+    }
+    private void OnTriggerEnter(Collider other) {
+        // if(other.gameObject.tag)
+        
+
+    }
+
     // Start is called before the first frame update
     void Start()
     {

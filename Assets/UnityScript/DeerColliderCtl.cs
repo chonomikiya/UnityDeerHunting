@@ -4,22 +4,10 @@ using UnityEngine;
 
 public class DeerColliderCtl : MonoBehaviour
 {
-    
-    private void OnCollisionEnter(Collision other) {
-        Debug.Log(other);
-    }
     private void OnTriggerEnter(Collider other) {
-        Debug.Log(other);
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
         
+        Debug.Log(other.gameObject.tag);
+        this.GetComponent<DeerController>();
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
 }

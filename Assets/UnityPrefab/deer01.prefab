@@ -1,5 +1,35 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1018277273080335461
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2707832933137272671}
+  m_Layer: 0
+  m_Name: position
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2707832933137272671
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1018277273080335461}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.0035, z: -0.00191}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 7469438785854811466}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1973562635146524490
 GameObject:
   m_ObjectHideFlags: 0
@@ -190,6 +220,7 @@ MonoBehaviour:
   Destination04: {fileID: 0}
   DeerDroppingPrefab: {fileID: 0}
   DroppingPosition: {fileID: 0}
+  m_Health: 5
   max_Random_value: 6
 --- !u!1 &7469438784920703730
 GameObject:
@@ -814,6 +845,7 @@ Transform:
   - {fileID: 7469438786857330082}
   - {fileID: 7469438785028257928}
   - {fileID: 7469438784920968241}
+  - {fileID: 2707832933137272671}
   m_Father: {fileID: 7469438785783414966}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
