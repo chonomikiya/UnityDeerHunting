@@ -21,18 +21,9 @@ public class BulletController : MonoBehaviour
             Debug.Log(other.collider.tag);
             // this.gameObject.GetComponent<Rigidbody>().isKinematic=true;
             other.gameObject.GetComponent<DeerController>().Animatiopn_Damage_Right_Play();
-
             Destroy(this.gameObject);
             return;
         }
-        // Debug.Log(other.collider.tag);
-        // Debug.Log(other.gameObject.name);
-        // Destroy(this.gameObject);
-    }
-    private void OnTriggerEnter(Collider other) {
-        // if(other.gameObject.tag)
-        
-
     }
 
     // Start is called before the first frame update
@@ -40,11 +31,15 @@ public class BulletController : MonoBehaviour
     {
         m_rigidbody = GetComponent<Rigidbody>();
         m_rigidbody.velocity = transform.forward * initial_velocity;
+        Invoke("Destroy_this",10F);
     }
 
     // Update is called once per frame
     void Update()
     {
 
+    }
+    void Destroy_this(){
+        Destroy(this.gameObject);
     }
 }

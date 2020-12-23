@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+
 public class DeerController : MonoBehaviour
 {
     
@@ -10,6 +11,7 @@ public class DeerController : MonoBehaviour
         walk,
         lookAround,
         vigilant,
+        injured,
         idle,
         run
     }
@@ -43,21 +45,18 @@ public class DeerController : MonoBehaviour
         //はじめに複数行き先を用意して順番に回る
         //二番目に近いTargetへ行く
         m_DeerAnimator = GetComponent<Animator>();
+        SetDestination();
     }
     void Update() {
-        switch(state){
-            case State.idle:
-                break;
-            case State.vigilant:
-                break;
-            default :
-                break;
-        }
-        if(Input.GetKeyDown(KeyCode.Return)){
-            // Animatinon_Idle_Play();
-            // Eat_or_nothing();
-            SetDestination();
-        }
+        // switch(state){
+        //     case State.idle:
+        //         break;
+        //     case State.vigilant:
+        //         break;
+        //     default :
+        //         break;
+        // }
+        
         if(Input.GetKeyDown(KeyCode.Space)){
             Dropping();
         }
@@ -65,8 +64,12 @@ public class DeerController : MonoBehaviour
     void FixedUpdate(){
         if(Vector3.Distance(this.transform.position,NavPos) < 5){
             // SetDestination();
-            Animation_Eat_Play();
-            DeerNav.ResetPath();
+            if(state == State.idle){
+                Animation_Eat_Play();
+                DeerNav.ResetPath();
+            }else if(state == State.vigilant){
+                SetDestination();
+            }
         }
     }
     //Idleアニメーション時に呼び出す関数
@@ -84,7 +87,28 @@ public class DeerController : MonoBehaviour
     public void Dropping(){
         GameObject Drop = Instantiate(DeerDroppingPrefab,DroppingPosition.transform.position,DroppingPosition.transform.rotation) as GameObject;
     }
-    
+    public void After_Run_switch(){
+        switch(state){
+            case State.idle:
+                break;
+            case State.vigilant:
+                PlayerDistance();
+                break;
+            case State.injured:
+                Damage_to_Life();
+                break;
+            default :
+                break;
+        }
+    }
+    public void PlayerDistance(){
+        if(Vector3.Distance(Player.transform.position,this.transform.position) > 100){
+            SetState_Idle();
+            Animation_walk_Play();
+            ReSetDestination();
+        }
+    }
+
     public void Animation_Eat_Play(){
         m_DeerAnimator.Play("Eat");
     }
@@ -92,19 +116,44 @@ public class DeerController : MonoBehaviour
         m_DeerAnimator.Play("Idle");
     }
     public void Animation_walk_Play(){
-        m_DeerAnimator.Play("walk");
-        DeerNav.SetDestination(Destination.transform.position);
+        // m_DeerAnimator.Play("walk");
+        Run_or_Walk();
+        // DeerNav.SetDestination(Destination.transform.position);
     }
     public void Animatiopn_Damage_Left_Play(){
         m_DeerAnimator.Play("Damage_Left");
+        SetState_injured();
     }
     public void Animatiopn_Damage_Right_Play(){
         m_DeerAnimator.Play("Damage_Right");
+        SetState_injured();
     }
+
     public void Animation_Die_Play(){
         m_DeerAnimator.Play("Die_Left");
     }
+    public void Animation_LookAroundLeft(){
+        if(state == State.idle){
+            m_DeerAnimator.Play("LookAroundLeft");
+            DeerNav.ResetPath();
+        }
+    }
+    public void Run_or_Walk(){
+        switch(state){
+            case State.idle:
+                m_DeerAnimator.Play("walk");
+                break;
+            case State.vigilant:
+                m_DeerAnimator.Play("Run");
+                break;
+            default :
+                Debug.Log("Run_or_walk() default");
+                break;
+        }
+    }
+
     public void Damage_to_Life(){
+
         m_Health--;
         if(m_Health <= 0){
             Animation_Die_Play();
@@ -113,6 +162,19 @@ public class DeerController : MonoBehaviour
         }
     }
 
+
+    //Stateの管理、アクセス用の関数
+
+    public void SetState_Vigilant(){
+        state = State.vigilant;
+    }
+    public void SetState_Idle(){
+        state = State.idle;
+    }
+    public void SetState_injured(){
+        state = State.injured;
+    }
+    //目的地をセットする関数
     public void SetDestination(){
         switch(NavValue){
             case 0:
@@ -135,6 +197,29 @@ public class DeerController : MonoBehaviour
         if(navSwitch)   NavValue--;
         if(!navSwitch)  NavValue++;
         DeerNav.SetDestination(NavPos);
-        m_DeerAnimator.Play("walk");
+        // m_DeerAnimator.Play("walk");
+        Run_or_Walk();
+    }
+    public void ReSetDestination(){
+        switch(NavValue){
+            case 0:
+                NavPos = Destination.transform.position;
+                if(navSwitch)  navSwitch = !navSwitch;
+                break;
+            case 1:
+                NavPos = Destination02.transform.position;
+                break;
+            case 2:
+                NavPos = Destination03.transform.position;
+                break;
+            case 3:
+                NavPos = Destination04.transform.position;
+                if(!navSwitch)  navSwitch = !navSwitch;
+                break;
+            default:
+                break;
+        }
+        DeerNav.SetDestination(NavPos);
+        Run_or_Walk();
     }
 }

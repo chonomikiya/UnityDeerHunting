@@ -5,9 +5,10 @@ using UnityEngine;
 public class DeerColliderCtl : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other) {
-        
-        Debug.Log(other.gameObject.tag);
-        this.GetComponent<DeerController>();
+        // if(other.gameObject.tag == "Player"){
+        //     Debug.Log(other.gameObject.tag);
+        //     this.GetComponent<DeerController>().Animation_LookAroundLeft();
+        // }
+        // Debug.Log(other.collision);
     }
-    
 }

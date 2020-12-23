@@ -1,9 +1,10 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
 
-namespace UnityStandardAssets.Characters.FirstPerson
-{
+
     
 
     [RequireComponent(typeof (Rigidbody))]
@@ -101,7 +102,9 @@ namespace UnityStandardAssets.Characters.FirstPerson
         [SerializeField] private Animator m_animator = null;
         [SerializeField] private GameObject bulletPrefab = null;
         [SerializeField] private GameObject Bullet_transform = null;
-
+        [SerializeField] private GameObject Deer = null;
+        [SerializeField] private GameObject Cardridge_transform = null;
+        [SerializeField] private GameObject CardridgePrefab = null;
 
         public Vector3 Velocity
         {
@@ -128,7 +131,20 @@ namespace UnityStandardAssets.Characters.FirstPerson
 #endif
             }
         }
+        
+        private void OnTriggerEnter(Collider other) {
+            
+            if(other.tag == "sight"){
+                Debug.Log(other.name);
+                Deer.GetComponent<DeerController>().SetState_Vigilant();
+                Deer.GetComponent<DeerController>().ReSetDestination();
+            }
+            if(other.tag == "vigiland"){
+                Debug.Log(other.tag);
+                Deer.GetComponent<DeerController>().Animation_LookAroundLeft();
 
+            }
+        }
 
         private void Start()
         {
@@ -158,8 +174,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
                     }
                     StateChange();
                     if(Input.GetKeyDown(KeyCode.Mouse0)){
-                        TriggerHappy();
-                        // BulletFire();
+                        // TriggerHappy();
+                        BulletFire();
                     }
                     break;
                 case State.noBullet: 
@@ -183,22 +199,26 @@ namespace UnityStandardAssets.Characters.FirstPerson
             Instantiate(bulletPrefab,Bullet_transform.transform.position,Bullet_transform.transform.rotation) as GameObject;
         
         }
-
-        //弾のステートはboolで管理したほうがいい気もする
+        public void Cardridge_throw(){
+            GameObject Cardridge = 
+            Instantiate(CardridgePrefab,Cardridge_transform.transform.position,Cardridge_transform.transform.rotation) as GameObject;
+        }
+        
+        // //弾のステートはboolで管理したほうがいい気もする
         void BulletFire(){
             BulletInstance();
             state = State.noBullet;
             Debug.Log("Fire");
         }
-        //テスト用打ち放題
-        void TriggerHappy(){
-            BulletInstance();
-        }
+        //テスト用撃ち放題
+        // void TriggerHappy(){
+        //     BulletInstance();
+        // }
 
         void Reload(){
             if(state == State.noBullet){
                 m_animator.Play("BoltAction");
-                
+                // Cardridge_throw();
             }else{
                 Debug.Log("err");
             }
@@ -362,6 +382,6 @@ namespace UnityStandardAssets.Characters.FirstPerson
         public void ChangeState_Close(){
             state = State.closeRifle;
             Debug.Log("closeRifleState");
-        }
+        }        
     }
-}
+

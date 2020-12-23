@@ -6,6 +6,8 @@ TagManager:
   tags:
   - body_L
   - body_R
+  - sight
+  - vigiland
   layers:
   - Default
   - TransparentFX
