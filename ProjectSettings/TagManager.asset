@@ -8,6 +8,8 @@ TagManager:
   - body_R
   - sight
   - vigiland
+  - head
+  - Deer
   layers:
   - Default
   - TransparentFX

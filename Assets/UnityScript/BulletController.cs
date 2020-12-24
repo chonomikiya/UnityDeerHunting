@@ -10,6 +10,13 @@ public class BulletController : MonoBehaviour
     Vector3 speed;
     
     private void OnCollisionEnter(Collision other) {
+        if(other.collider.tag == "head"){
+            Debug.Log(other.collider.tag);
+
+            other.gameObject.GetComponent<DeerController>().HeadShot();
+            Destroy(this.gameObject);
+            return ;
+        }
         if(other.collider.tag == "body_L"){
             Debug.Log(other.collider.tag);
             // this.gameObject.GetComponent<Rigidbody>().isKinematic=true;
@@ -24,6 +31,7 @@ public class BulletController : MonoBehaviour
             Destroy(this.gameObject);
             return;
         }
+        Destroy(this.gameObject);
     }
 
     // Start is called before the first frame update

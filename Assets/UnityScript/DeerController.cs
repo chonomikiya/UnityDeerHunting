@@ -33,11 +33,9 @@ public class DeerController : MonoBehaviour
     Vector3 NavPos;
     bool navSwitch = false;
     bool vigilant = false;
-
-
+    bool Deer_isDie = false;
 
     // Start is called before the first frame update
-
     void Start()
     {
         m_rigidbody = GetComponent<Rigidbody>();
@@ -71,6 +69,9 @@ public class DeerController : MonoBehaviour
                 SetDestination();
             }
         }
+    }
+    public bool getDeer_isDie(){
+        return Deer_isDie;
     }
     //Idleアニメーション時に呼び出す関数
     //1/max_Random_valueでEatアニメーションを再生
@@ -128,9 +129,15 @@ public class DeerController : MonoBehaviour
         m_DeerAnimator.Play("Damage_Right");
         SetState_injured();
     }
+    public void HeadShot(){
+        state = State.injured;
+        m_Health = 0;
+        Animation_Die_Play();
+    }
 
     public void Animation_Die_Play(){
         m_DeerAnimator.Play("Die_Left");
+        Deer_isDie = true;
     }
     public void Animation_LookAroundLeft(){
         if(state == State.idle){

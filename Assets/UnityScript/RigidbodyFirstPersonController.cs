@@ -80,7 +80,7 @@ using UnityStandardAssets.CrossPlatformInput;
             public float shellOffset; //reduce the radius by that ratio to avoid getting stuck in wall (a value of 0.1f is nice)
         }
         public enum State{
-            holdRifle,Switching,closeRifle,noBullet
+            holdRifle,Switching,closeRifle,noBullet,noAmm
         }
         private State state = State.holdRifle;
         
@@ -105,6 +105,9 @@ using UnityStandardAssets.CrossPlatformInput;
         [SerializeField] private GameObject Deer = null;
         [SerializeField] private GameObject Cardridge_transform = null;
         [SerializeField] private GameObject CardridgePrefab = null;
+        [SerializeField] private GameObject AmmUI = null;
+        [SerializeField] private int haveAmm = 5;
+        private bool noAmm = false;
 
         public Vector3 Velocity
         {
@@ -142,7 +145,6 @@ using UnityStandardAssets.CrossPlatformInput;
             if(other.tag == "vigiland"){
                 Debug.Log(other.tag);
                 Deer.GetComponent<DeerController>().Animation_LookAroundLeft();
-
             }
         }
 
@@ -175,7 +177,9 @@ using UnityStandardAssets.CrossPlatformInput;
                     StateChange();
                     if(Input.GetKeyDown(KeyCode.Mouse0)){
                         // TriggerHappy();
-                        BulletFire();
+                        if(!noAmm){
+                            BulletFire();
+                        }
                     }
                     break;
                 case State.noBullet: 
@@ -183,6 +187,11 @@ using UnityStandardAssets.CrossPlatformInput;
                         Reload();
                     }
                     break;
+                // case State.noAmm:
+                //     if(Input.GetKeyDown(KeyCode.R)){
+                //         Reload();
+                //     }
+                //     break;
                 case State.Switching:
                     // SwitchingWeapon();
                     break;
@@ -209,6 +218,14 @@ using UnityStandardAssets.CrossPlatformInput;
             BulletInstance();
             state = State.noBullet;
             Debug.Log("Fire");
+            haveAmm--;
+            AmmUI.GetComponent<AmmDisplayController>().ChangeAmmValue(haveAmm);
+            AmmUI.GetComponent<AmmDisplayController>().AmmImageInvisible();
+            Debug.Log(haveAmm);
+            if(haveAmm < 1){
+                haveAmm = 0;
+                noAmm = true;
+            }
         }
         //テスト用撃ち放題
         // void TriggerHappy(){
@@ -219,7 +236,10 @@ using UnityStandardAssets.CrossPlatformInput;
             if(state == State.noBullet){
                 m_animator.Play("BoltAction");
                 // Cardridge_throw();
-            }else{
+            }else if(state == State.noAmm){
+                m_animator.Play("noAmmBoltAction");
+            }
+            else{
                 Debug.Log("err");
             }
         }
@@ -376,6 +396,9 @@ using UnityStandardAssets.CrossPlatformInput;
             // }
         }
         public void ChangeState_Hold(){
+            if(haveAmm >0){
+                AmmUI.GetComponent<AmmDisplayController>().AmmImageSee();
+            }
             state = State.holdRifle;
             Debug.Log("HoldRifleState");
         }

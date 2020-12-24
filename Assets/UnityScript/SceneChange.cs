@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 public class SceneChange : MonoBehaviour
 {
     void Update () {
-        
         if(SceneManager.GetActiveScene().name == "StartScene" && Input.GetKey(KeyCode.Space)){
             SceneManager.LoadScene("GameScene");
         }
@@ -14,5 +13,8 @@ public class SceneChange : MonoBehaviour
         if(SceneManager.GetActiveScene().name == "ResultScene" && Input.GetKey(KeyCode.Space)){
             SceneManager.LoadScene("StartScene");
         }
+    }
+    public void GameSceneChange(){
+        SceneManager.LoadScene("ResultScene");
     }
 }
