@@ -138,6 +138,7 @@ public class DeerController : MonoBehaviour
     public void Animation_Die_Play(){
         m_DeerAnimator.Play("Die_Left");
         Deer_isDie = true;
+        m_rigidbody.constraints = RigidbodyConstraints.FreezeAll;
     }
     public void Animation_LookAroundLeft(){
         if(state == State.idle){

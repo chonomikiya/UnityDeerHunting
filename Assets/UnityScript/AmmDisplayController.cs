@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -27,6 +27,7 @@ public class AmmDisplayController : MonoBehaviour
         }
         
     }
+    
     public void ChangeAmmValue(int PlayerAmm){
         AmmText.text = PlayerAmm.ToString();
     }

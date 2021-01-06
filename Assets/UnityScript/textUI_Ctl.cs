@@ -13,7 +13,8 @@ public class textUI_Ctl : MonoBehaviour
     [SerializeField] private GameObject DeerObj = null;
     private DeerController m_DeerCtl = null;
     [SerializeField] private GameObject m_sChange = null;
-    
+    [SerializeField] GameObject DeerDeadDir = null;
+    [SerializeField] GameObject mousectl = null;
     Text UItext01,UItext02; 
     private RectTransform myRectTfm;
     bool DeerOnRange = false;
@@ -46,6 +47,8 @@ public class textUI_Ctl : MonoBehaviour
             changetextUIInvisible();
         }
         if(textDisplayflag && Input.GetKeyDown(KeyCode.F)){
+            DeerDeadDir.GetComponent<IsDeadJudgment>().DeerIsDead();
+            this.transform.root.gameObject.GetComponent<RigidbodyFirstPersonController>().mouseLook.MouseCursolLook();
             m_sChange.GetComponent<SceneChange>().GameSceneChange();
         }
         myRectTfm.position 

@@ -175,7 +175,7 @@ using UnityStandardAssets.CrossPlatformInput;
                         Debug.Log("haveRifleState");
                     }
                     StateChange();
-                    if(Input.GetKeyDown(KeyCode.Mouse0)){
+                    if(Input.GetKeyDown(KeyCode.Mouse0) && Time.timeScale == 1f){
                         // TriggerHappy();
                         if(!noAmm){
                             BulletFire();

@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityStandardAssets.CrossPlatformInput;
+using UnityEngine.SceneManagement;
 
 
     [Serializable]
@@ -77,8 +78,9 @@ using UnityStandardAssets.CrossPlatformInput;
             {
                 m_cursorIsLocked = false;
             }
-            else if(Input.GetMouseButtonUp(0))
+            else if(Input.GetMouseButtonUp(0) && SceneManager.GetActiveScene().name == "GameScene")
             {
+
                 m_cursorIsLocked = true;
             }
 
@@ -109,6 +111,13 @@ using UnityStandardAssets.CrossPlatformInput;
 
             return q;
         }
-
+        public void MouseCursolLook(){
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+        public void MouseCursolInvisible(){
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
     }
 
