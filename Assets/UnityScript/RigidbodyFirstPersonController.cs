@@ -106,6 +106,7 @@ using UnityStandardAssets.CrossPlatformInput;
         [SerializeField] private GameObject Cardridge_transform = null;
         [SerializeField] private GameObject CardridgePrefab = null;
         [SerializeField] private GameObject AmmUI = null;
+        [SerializeField] private GameObject myAudioCtl = null;
         [SerializeField] private int haveAmm = 5;
         private bool noAmm = false;
 
@@ -216,6 +217,7 @@ using UnityStandardAssets.CrossPlatformInput;
         // //弾のステートはboolで管理したほうがいい気もする
         void BulletFire(){
             BulletInstance();
+            FireSound();
             state = State.noBullet;
             Debug.Log("Fire");
             haveAmm--;
@@ -235,6 +237,7 @@ using UnityStandardAssets.CrossPlatformInput;
         void Reload(){
             if(state == State.noBullet){
                 m_animator.Play("BoltAction");
+
                 // Cardridge_throw();
             }else if(state == State.noAmm){
                 m_animator.Play("noAmmBoltAction");
@@ -242,6 +245,15 @@ using UnityStandardAssets.CrossPlatformInput;
             else{
                 Debug.Log("err");
             }
+        }
+        public void BoltActionSound(){
+            myAudioCtl.GetComponent<AudioController>().BoltActionSoundPlay();
+        }
+        public void BoltActionSound2(){
+            myAudioCtl.GetComponent<AudioController>().BoltActionSound2Play();
+        }
+        public void FireSound(){
+            myAudioCtl.GetComponent<AudioController>().FireSoundPlay();
         }
         private void FixedUpdate()
         {
