@@ -33,4 +33,7 @@ public class ButtonControl : MonoBehaviour
     public void NextSceneForGiveUp(){
         mySceneCtl.GetComponent<SceneChange>().GameSceneChange();
     }
+    public void ExitGame(){
+        Application.Quit();
+    }
 }

@@ -138,7 +138,7 @@ using UnityStandardAssets.CrossPlatformInput;
         
         private void OnTriggerEnter(Collider other) {
             
-            if(other.tag == "sight"){
+            if(other.tag == "sight" && !Deer.GetComponent<DeerController>().getDeer_isDie()){
                 Debug.Log(other.name);
                 Deer.GetComponent<DeerController>().SetState_Vigilant();
                 Deer.GetComponent<DeerController>().ReSetDestination();
@@ -246,14 +246,29 @@ using UnityStandardAssets.CrossPlatformInput;
                 Debug.Log("err");
             }
         }
+        // SoundMethod
         public void BoltActionSound(){
             myAudioCtl.GetComponent<AudioController>().BoltActionSoundPlay();
         }
         public void BoltActionSound2(){
-            myAudioCtl.GetComponent<AudioController>().BoltActionSound2Play();
+            if(!noAmm){
+                myAudioCtl.GetComponent<AudioController>().BoltActionSound2Play();
+            }
         }
         public void FireSound(){
             myAudioCtl.GetComponent<AudioController>().FireSoundPlay();
+        }
+        public void isWalkingSound(){
+            myAudioCtl.GetComponent<AudioController>().WalkingSoundPlay();
+        }
+        public void StopWalkingSound(){
+            myAudioCtl.GetComponent<AudioController>().WalkingSoundStop();
+        }
+        public void RunningSound(){
+            myAudioCtl.GetComponent<AudioController>().WalkSoundPitch_High();
+        }
+        public void NotRunning(){
+            myAudioCtl.GetComponent<AudioController>().walkSoundPitch_neutral();
         }
         private void FixedUpdate()
         {
@@ -262,6 +277,13 @@ using UnityStandardAssets.CrossPlatformInput;
             
             if ((Mathf.Abs(input.x) > float.Epsilon || Mathf.Abs(input.y) > float.Epsilon) && (advancedSettings.airControl || m_IsGrounded))
             {
+
+                isWalkingSound();
+                if(Running && CrossPlatformInputManager.GetAxis("Vertical")>0){
+                    RunningSound();
+                }else{
+                    NotRunning();
+                }
                 // always move along the camera forward as it is the direction that it being aimed at
                 Vector3 desiredMove = cam.transform.forward*input.y + cam.transform.right*input.x;
                 desiredMove = Vector3.ProjectOnPlane(desiredMove, m_GroundContactNormal).normalized;
@@ -274,6 +296,8 @@ using UnityStandardAssets.CrossPlatformInput;
                 {
                     m_RigidBody.AddForce(desiredMove*SlopeMultiplier(), ForceMode.Impulse);
                 }
+            }else {
+                StopWalkingSound();
             }
 
             if (m_IsGrounded)
@@ -417,6 +441,7 @@ using UnityStandardAssets.CrossPlatformInput;
         public void ChangeState_Close(){
             state = State.closeRifle;
             Debug.Log("closeRifleState");
-        }        
+        }
+                
     }
 

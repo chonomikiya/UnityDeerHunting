@@ -26,6 +26,7 @@ public class DeerController : MonoBehaviour
     [SerializeField] GameObject Destination04;
     [SerializeField] GameObject DeerDroppingPrefab;
     [SerializeField] GameObject DroppingPosition;
+    [SerializeField] GameObject AudioCtl = null;
     int NavValue=0;
     [SerializeField] int m_Health = 5;
     Animator m_DeerAnimator;
@@ -63,6 +64,7 @@ public class DeerController : MonoBehaviour
         if(Vector3.Distance(this.transform.position,NavPos) < 5){
             // SetDestination();
             if(state == State.idle){
+                Audio_Mewling();
                 Animation_Eat_Play();
                 DeerNav.ResetPath();
             }else if(state == State.vigilant){
@@ -104,6 +106,7 @@ public class DeerController : MonoBehaviour
     }
     public void PlayerDistance(){
         if(Vector3.Distance(Player.transform.position,this.transform.position) > 100){
+            Audio_Mewling();
             SetState_Idle();
             Animation_walk_Play();
             ReSetDestination();
@@ -123,10 +126,12 @@ public class DeerController : MonoBehaviour
     }
     public void Animatiopn_Damage_Left_Play(){
         m_DeerAnimator.Play("Damage_Left");
+        Audio_BeShot();
         SetState_injured();
     }
     public void Animatiopn_Damage_Right_Play(){
         m_DeerAnimator.Play("Damage_Right");
+        Audio_BeShot();
         SetState_injured();
     }
     public void HeadShot(){
@@ -137,8 +142,10 @@ public class DeerController : MonoBehaviour
 
     public void Animation_Die_Play(){
         m_DeerAnimator.Play("Die_Left");
+        Audio_BeExhausted();
         Deer_isDie = true;
         m_rigidbody.constraints = RigidbodyConstraints.FreezeAll;
+        m_rigidbody.isKinematic = true;
     }
     public void Animation_LookAroundLeft(){
         if(state == State.idle){
@@ -149,9 +156,11 @@ public class DeerController : MonoBehaviour
     public void Run_or_Walk(){
         switch(state){
             case State.idle:
+                Audio_Mewling();
                 m_DeerAnimator.Play("walk");
                 break;
             case State.vigilant:
+                Audio_BeShot();
                 m_DeerAnimator.Play("Run");
                 break;
             default :
@@ -168,6 +177,17 @@ public class DeerController : MonoBehaviour
             DeerNav.ResetPath();
             m_rigidbody.velocity = Vector3.zero;
         }
+    }
+
+    //Audioの再生method
+    public void Audio_BeShot(){
+        AudioCtl.GetComponent<AudioController>().DeerMewling01Play();
+    }
+    public void Audio_Mewling(){
+        AudioCtl.GetComponent<AudioController>().DeerMewling02Play();
+    }
+    public void Audio_BeExhausted(){
+        AudioCtl.GetComponent<AudioController>().DeerMewling03Play();
     }
 
 
