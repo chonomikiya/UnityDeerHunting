@@ -1,3 +1,2 @@
 # UnityDeerHunting
-unity test
 
